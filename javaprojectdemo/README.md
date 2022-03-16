@@ -11,9 +11,25 @@ cd hamropatrofelloship/javaprojectdemo
 ```
 3. copy `database.properties_sample` to `database.properties`
 ```
+4. create database in mysql and create table
+```
+CREATE TABLE users (
+
+  username varchar(30) NOT NULL,
+
+  password varchar(40) NOT NULL,
+
+  full_name varchar(45) NOT NULL,
+
+  email varchar(100) DEFAULT NULL,
+
+  PRIMARY KEY (username)
+
+);
+```
 cp app/src/main/resources/database.properties_sample app/src/main/resources/database.properties
 ```
-4. build the docker file
+1. build the docker file
 ```
 docker build -t <yourname>/javademo:<tag> . 
 ```
@@ -25,7 +41,7 @@ docker run --name javademo <yourname>/javademo:<tag>
 ---
 :( it won't work now because there is no database container
 
-[but you can the build process is sucessful]
+[but you can see the build process is sucessful]
 
 I will be creating the k8s deployment soon.
 
