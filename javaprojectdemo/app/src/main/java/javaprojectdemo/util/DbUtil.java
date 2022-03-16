@@ -40,7 +40,7 @@ public class DbUtil {
                 String password = getProperty("password");
                 Class.forName(driver);
                 connection = DriverManager.getConnection(url, user, password);
-                connection.setAutoCommit(false);
+//                connection.setAutoCommit(false);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {

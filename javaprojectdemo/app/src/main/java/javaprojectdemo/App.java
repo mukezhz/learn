@@ -14,15 +14,15 @@ public class App {
         System.out.println(new App().getGreeting());
         // Add new user
         User user = new User();
-        user.setUsername("luiz");
+        user.setUsername("fast");
         user.setPassword("secret");
-        user.setFullName("Luiz Suarez");
-        user.setEmail("luiz@example.com");
+        user.setFullName("test test");
+        user.setEmail("test@test.com");
         // Update user
+        System.out.println("Adding data to the database");
         UserDao dao = new UserDao();
         dao.addUser(user);
         user.setPassword("verysecret");
         dao.updateUser(user);
-        System.out.println(dao.getAllUsers());
     }
 }

@@ -34,9 +34,11 @@ public class UserDao {
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            System.out.println("User has been added successfully");
         } catch (SQLException e) {
-            e.printStackTrace();
-        } 
+            System.out.println("username already exits");
+            // e.printStackTrace();
+        }
     }
  
     public void deleteUser(String username) {
