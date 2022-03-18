@@ -22,7 +22,24 @@ public class UserDao {
     public UserDao(Connection conn) {
         connection = conn;
     }
- 
+
+    public void createUserTable() {
+        try {
+            Statement stmt = connection.createStatement();
+            String sql = "CREATE TABLE users( " +
+                    " username varchar(30) NOT NULL, " +
+                    " password varchar(40) NOT NULL, " +
+                    " full_name varchar(45) NOT NULL, " +
+                    " email varchar(100) DEFAULT NULL, " +
+                    " PRIMARY KEY (username));";
+
+            stmt.executeUpdate(sql);
+            System.out.println("Created table in given database...");
+        } catch (SQLException e) {
+            System.out.println("Table already created");
+        }
+    }
+
     public void addUser(User user) {
         try {
             PreparedStatement preparedStatement = connection

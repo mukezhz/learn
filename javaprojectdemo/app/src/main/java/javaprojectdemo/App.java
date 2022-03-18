@@ -21,6 +21,7 @@ public class App {
         // Update user
         System.out.println("Adding data to the database");
         UserDao dao = new UserDao();
+        dao.createUserTable();
         dao.addUser(user);
         user.setPassword("verysecret");
         dao.updateUser(user);
