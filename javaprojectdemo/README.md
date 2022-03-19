@@ -1,5 +1,7 @@
 # Java project deployment
 
+## Run app using docker
+
 0. clone the repo
 ```
 git clone https://gitlab.com/mukezhz/hamropatrofellowship.git
@@ -11,38 +13,75 @@ cd hamropatrofelloship/javaprojectdemo
 ```
 3. copy `database.properties_sample` to `database.properties`
 ```
-4. create database in mysql and create table
-```
-CREATE TABLE users (
-
-  username varchar(30) NOT NULL,
-
-  password varchar(40) NOT NULL,
-
-  full_name varchar(45) NOT NULL,
-
-  email varchar(100) DEFAULT NULL,
-
-  PRIMARY KEY (username)
-
-);
-```
 cp app/src/main/resources/database.properties_sample app/src/main/resources/database.properties
 ```
-1. build the docker file
+4. build the docker file
 ```
 docker build -t <yourname>/javademo:<tag> . 
 ```
-4. run the docker
+5. create docker network
 ```
-docker run --name javademo <yourname>/javademo:<tag>
+docker network create <networkname>
+```
+
+6. run mysql container
+```
+docker run --name <containerdbname> -d -e MYSQL_ROOT_PASSWORD=<password> mysql:latest
+```
+
+7. add mysql to the network
+```
+docker network connect <networkname> <containerdbname>
+```
+
+8. run the docker using network name
+```
+docker run --name <java_appcontainername> --network <networkname> <yourname>/javademo:<tag>
 ```
 
 ---
-:( it won't work now because there is no database container
+# Run app using kubernetes
+---
 
-[but you can see the build process is sucessful]
+0. go to k8s dir
+```
+cd k8s/
+```
 
-I will be creating the k8s deployment soon.
+1. add kubernetes secret and configmap
+```
+kubectl apply -f mysql-config.yml 
+kubectl apply -f mysql-secret.yml 
+```
 
-Stay tunes 😋😋😋
+2. run mysql service and deployment:
+```
+kubectl apply -f mysql.yml
+```
+
+3. run java application
+```
+kubectl apply -f java-app.yml
+```
+
+**NOTE**: you must install desired requirement of kubernetes before executing the above commands
+
+I am using: 
+
+- kubectl [kubernetes client] &
+
+- minikube [kubernetes component packaged in a single application best for the developement]
+
+### For arch based linux to install minikube and kubectl
+
+```
+sudo pacman -S minikube kubectl
+````
+
+Start minikube using:
+```
+minikube start
+```
+
+---
+### Happy leaning 😋😋😋
