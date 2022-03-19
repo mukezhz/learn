@@ -83,5 +83,9 @@ Start minikube using:
 minikube start
 ```
 
+*I you got any problem then feel free to make issue here:*
+
+[Create a new issue](https://gitlab.com/mukezhz/hamropatrofellowship/-/issues/new)
+
 ---
 ### Happy leaning 😋😋😋
