@@ -15,6 +15,7 @@
 5. CNCF
 6. Complicated than Docker Compose [Docker Swarm]
 7. K8s distribution: k3s, kind, minikube, k0s 
+    
     ![](./img/distro.png)
 
 ## Minikube
