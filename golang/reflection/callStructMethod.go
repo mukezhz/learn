@@ -35,5 +35,5 @@ func main() {
 
 	fmt.Println("After set name:", u.Name)
 
-	fmt.Println(v.NumMethod())
+	fmt.Println(v.NumMethod(), v.Method(0).Call(nil))
 }
