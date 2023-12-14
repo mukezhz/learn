@@ -34,4 +34,6 @@ func main() {
 	setName.Call([]reflect.Value{reflect.ValueOf("Jerry")})
 
 	fmt.Println("After set name:", u.Name)
+
+	fmt.Println(v.NumMethod())
 }
