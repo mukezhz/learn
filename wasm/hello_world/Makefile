@@ -3,7 +3,7 @@ OUTPUT_DIR := assets
 OUTPUT := hello_world.wasm
 
 
-build: cmd/wasm/*.go
+build: ${WASM_DIR}/main.go
 	GOOS=js GOARCH=wasm go build -o ${OUTPUT_DIR}/${OUTPUT} ${WASM_DIR}/*
 
 run: build
