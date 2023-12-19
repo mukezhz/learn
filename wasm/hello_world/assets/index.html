@@ -6,7 +6,7 @@
     <title>WASM HELLO WORLD</title>
   </head>
   <body>
-    <h1>WebAssembly using GoLang</h1>
+    <h1>WebAssembly using :</h1>
     <script src="wasm_exec.js"></script>
     <script>
       async function run() {
@@ -16,6 +16,10 @@
           go.importObject
         );
         go.run(result.instance);
+
+        const heading = document.getElementsByTagName("h1")[0];
+        const originalText = heading.innerText;
+        heading.innerText = originalText + " " + window?.goLang;
       }
       run();
     </script>
