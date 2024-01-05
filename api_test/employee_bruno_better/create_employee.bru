@@ -1,0 +1,42 @@
+meta {
+  name: Create Employee
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/employees/create
+}
+
+headers {
+  content-type: application/json
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+
+  const randomName = faker.name.fullName();
+  req.setBody({
+    "id": 3,
+    "name": randomName,
+    "salary": 20000
+  })
+}
+
+script:post-response {
+  bru.setVar("id", res.getBody().id);
+  bru.setVar("createdEmployee", res.getBody());
+}
+
+
+tests {
+  test("should have response status 201", function() {
+      expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should have employee id 3", function() {
+      const data = res.getBody();
+      expect(data.id).to.equal(3);
+  });
+}
+

@@ -1,0 +1,38 @@
+meta {
+  name: Create Employee
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8000/employees/create
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+}
+
+body:json {
+  {
+    "id": 3,
+    "name": "Marry",
+    "salary": 20000
+  }
+}
+
+script:post-response {
+  console.log(res.getBody());
+}
+
+tests {
+  test("should have response status 201", function() {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("should have employee id 3", function() {
+      const data = res.getBody();
+      expect(data.id).to.equal(3);
+  });
+}

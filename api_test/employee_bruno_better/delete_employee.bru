@@ -1,0 +1,16 @@
+meta {
+  name: Delete Employee
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/employees/delete/{{id}}
+}
+
+tests {
+  test("should have response status 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+

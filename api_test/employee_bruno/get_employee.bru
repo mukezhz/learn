@@ -1,0 +1,19 @@
+meta {
+  name: Get Employee
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8000/employees/get/1
+}
+
+script:post-response {
+  console.log(res.getBody())
+}
+
+tests {
+  test("should have response status 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

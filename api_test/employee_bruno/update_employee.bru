@@ -1,0 +1,38 @@
+meta {
+  name: Update Employee
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8000/employees/update/3
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+}
+
+body:json {
+  {
+    "id": 3,
+    "name": "Max",
+    "salary": 20000
+  }
+}
+
+script:post-response {
+  console.log(res.getBody());
+}
+
+tests {
+  test("should have response status 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should have employee id 3", function() {
+      const data = res.getBody();
+      expect(data.name).to.equal("Max");
+  });
+}

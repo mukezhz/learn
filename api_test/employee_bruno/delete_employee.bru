@@ -1,0 +1,21 @@
+meta {
+  name: Delete Employee
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8000/employees/delete/1
+}
+
+script:post-response {
+  console.log("DELETED!!!");
+}
+
+
+tests {
+  test("should have response status 200", function() {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+
