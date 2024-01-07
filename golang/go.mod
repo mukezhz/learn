@@ -3,9 +3,10 @@ module github.com/mukezhz/learn
 go 1.21.4
 
 require (
-	github.com/charmbracelet/bubbles v0.16.1
-	github.com/charmbracelet/bubbletea v0.24.2
+	github.com/charmbracelet/bubbles v0.17.1
+	github.com/charmbracelet/bubbletea v0.25.0
 	github.com/charmbracelet/lipgloss v0.9.1
+	github.com/opensearch-project/opensearch-go v1.1.0
 )
 
 require (
