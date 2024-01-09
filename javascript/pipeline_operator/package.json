@@ -1,0 +1,17 @@
+{
+  "name": "pipeline_operator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "babel main.js --out-file output.js && node output.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-proposal-pipeline-operator": "^7.23.3"
+  }
+}
