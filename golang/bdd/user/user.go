@@ -33,6 +33,11 @@ func (us *UserService) ListUser() []User {
 }
 
 func (us *UserService) AddUser(user User) User {
+	for _, u := range us.Users {
+		if u.Username == user.Username {
+			return u
+		}
+	}
 	us.Users = append(us.Users, user)
 	return user
 }
@@ -50,4 +55,15 @@ func (us *UserService) GetUser(username string) (User, error) {
 	}
 
 	return user, errors.New("user not found")
+}
+
+type UserController struct {
+	userService UserService
+}
+
+func NewUserController(us UserService) *UserController {
+	uc := UserController{
+		userService: us,
+	}
+	return &uc
 }
