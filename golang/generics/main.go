@@ -2,26 +2,15 @@ package main
 
 import "fmt"
 
-// function with generic type
-func print[T any](s []T) {
-	for _, v := range s {
-		println(v)
-	}
-}
-
-func double[T int | float32](s T) T {
-	return s * 2
-}
-
 // generic in interface
 type Data interface {
 	int | float32
 }
 
 type User[T Data] struct {
+	Data T
 	Name string
 	Age  int
-	Data T
 }
 
 // generic with struct
@@ -62,13 +51,6 @@ func foo() Getter[string] {
 type CustomMap[K int | float32, V string] map[K]V
 
 func main() {
-	print([]int{1, 2, 3})
-	print([]string{"a", "b", "c"})
-	v := double[int](5)
-	fmt.Println(v)
-	w := double[float32](5.6)
-	fmt.Println(w)
-
 	u := User[int]{Name: "John", Age: 20, Data: 10}
 	fmt.Println(u)
 	u2 := User[float32]{Name: "John", Age: 20, Data: 10.5}
