@@ -1,0 +1,30 @@
+syntax="proto3";
+ 
+package proto.v1;
+ 
+option go_package = "github.com/mukezhz/learn/golang/grpc/todo/pb";
+import "google/api/annotations.proto";
+ 
+ 
+message CreateTodoRequest {
+   string name = 1;
+   string description = 2;
+   bool done = 3;
+}
+ 
+message CreateTodoResponse {
+   string name = 1;
+   string description = 2;
+   bool done = 3;
+   string id = 4;
+}
+ 
+service TodoService {
+   rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {
+      option (google.api.http) = {
+        post: "/v1/todo"
+        body: "*"
+      };
+    }
+}
+
