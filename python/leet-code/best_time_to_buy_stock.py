@@ -19,7 +19,8 @@ max_profit = 0
 
 while sell_pointer < len(input):
     if input[buy_pointer] < input[sell_pointer]:
-        max_profit = max(max_profit, input[sell_pointer] - input[buy_pointer])
+        profit = input[sell_pointer] - input[buy_pointer]
+        max_profit = max(max_profit, profit)
     else:
         buy_pointer = sell_pointer
     sell_pointer += 1
