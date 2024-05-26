@@ -27,18 +27,21 @@ type TodoServer struct {
 	pb.UnimplementedTodoServiceServer
 }
 
-func (s *TodoServer) CreateTodo(ctx context.Context, in *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
+func (s *TodoServer) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, fmt.Errorf("missing metadata")
 	}
-	customHeader1 := md.Get("x-custom-header1")
-	customHeader2 := md.Get("new-header")
-	customHeader3 := md.Get("custom-nothing")
-	log.Printf("Received Headers: %v __ %v __ %v\n", customHeader1, customHeader2, customHeader3)
+	requiredHeader := md.Get("x-required-header")
+	aliasHeader := md.Get("another-header")
+	nothingHeader := md.Get("x-nothing")
+	if len(requiredHeader) == 0 {
+		return nil, fmt.Errorf("missing required header")
+	}
+	log.Printf("Received Headers: %v __ %v __ %v\n", requiredHeader, aliasHeader, nothingHeader)
 	todo := &pb.CreateTodoResponse{
-		Name:        in.GetName(),
-		Description: in.GetDescription(),
+		Name:        req.GetName(),
+		Description: req.GetDescription(),
 		Done:        false,
 		Id:          uuid.New().String(),
 	}
@@ -58,22 +61,23 @@ var grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:50051", 
 
 func HeaderMatcher(key string) (string, bool) {
 	switch key {
-	case "X-Custom-Header1":
+	case "X-Required-Header":
 		return key, true
-	case "X-Custom-Header2":
-		return "new-header", true
-	case "X-Custom-Nothing":
-		return "custom-nothing", false
-	default:
-		fmt.Println("HeaderMatcher", key)
+	case "X-Alias-Header":
+		return "another-header", true
+	case "X-Nothing":
 		return key, false
+	default:
+		return key, true
 	}
 }
 
-func run() error {
+func runHTTP() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
+
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	mux := runtime.NewServeMux(
 		runtime.WithMarshalerOption("application/json+pretty", &runtime.JSONPb{
@@ -87,8 +91,7 @@ func run() error {
 		}),
 		runtime.WithIncomingHeaderMatcher(HeaderMatcher),
 	)
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err := pb.RegisterTodoServiceHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts)
+	err := pb.RegisterTodoServiceHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
 	if err != nil {
 		return err
 	}
@@ -118,7 +121,7 @@ func main() {
 
 	go runGRPC()
 	go func() {
-		if err := run(); err != nil {
+		if err := runHTTP(); err != nil {
 			grpclog.Fatal(err)
 		}
 	}()
