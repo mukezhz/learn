@@ -46,11 +46,11 @@ const filterAuthors = `-- name: FilterAuthors :many
 SELECT id, name, bio, created_at, updated_at
 FROM authors
 WHERE (
-        $3::TEXT IS NULL
+        COALESCE($3, '') = ''
         OR name ILIKE '%' || $3 || '%'
     ) -- search by name
     AND (
-        $4::TEXT IS NULL
+        COALESCE($4, '') = ''
         OR bio ILIKE '%' || $4 || '%'
     ) -- search by bio
 ORDER BY name
@@ -60,8 +60,8 @@ LIMIT $1 OFFSET $2
 type FilterAuthorsParams struct {
 	Limit  int32
 	Offset int32
-	Name   string
-	Bio    string
+	Name   interface{}
+	Bio    interface{}
 }
 
 func (q *Queries) FilterAuthors(ctx context.Context, arg FilterAuthorsParams) ([]Author, error) {

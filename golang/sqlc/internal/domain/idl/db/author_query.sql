@@ -23,11 +23,11 @@ DELETE FROM authors WHERE id = $1;
 SELECT *
 FROM authors
 WHERE (
-        @name::TEXT IS NULL
+        COALESCE(@name, '') = ''
         OR name ILIKE '%' || @name || '%'
     ) -- search by name
     AND (
-        @bio::TEXT IS NULL
+        COALESCE(@bio, '') = ''
         OR bio ILIKE '%' || @bio || '%'
     ) -- search by bio
 ORDER BY name
