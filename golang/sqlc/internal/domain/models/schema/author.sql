@@ -1,0 +1,8 @@
+CREATE TABLE authors (
+  id BIGSERIAL PRIMARY KEY,
+  name text NOT NULL,
+  bio text
+);
+
+ALTER TABLE authors ADD COLUMN created_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE authors ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
