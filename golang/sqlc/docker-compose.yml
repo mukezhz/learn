@@ -12,7 +12,7 @@ services:
     container_name: sqlc
     security_opt:
       - seccomp:unconfined
-  db:
+  database:
     image: postgres:16-bullseye
     container_name: db
     ports:

@@ -56,6 +56,7 @@ func (r *Repository) AddAuthor(
 		Name: author.Name,
 		Bio: pgtype.Text{
 			String: author.Bio,
+			Valid:  true,
 		},
 	})
 	return err
