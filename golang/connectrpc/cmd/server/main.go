@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
+	"connectrpc.com/grpcreflect"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -50,13 +51,23 @@ func (s *GreetServer) Greet(
 	return res, nil
 }
 
+const greetServiceName = "greet.v1.GreetService"
+
 func main() {
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
+
 	interceptors := connect.WithInterceptors(NewAuthInterceptor())
 	path, handler := greetv1connect.NewGreetServiceHandler(greeter, interceptors)
+	mux.Handle(grpcreflect.NewHandlerV1(
+		grpcreflect.NewStaticReflector(greetServiceName),
+	))
+	mux.Handle(grpcreflect.NewHandlerV1Alpha(
+		grpcreflect.NewStaticReflector(greetServiceName),
+	))
 	mux.Handle(path, handler)
 	log.Println("Listening on :8080")
+
 	http.ListenAndServe(
 		"localhost:8080",
 		// Use h2c so we can serve HTTP/2 without TLS.
