@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package greet.v1;
+package idl.greet.v1;
 
-option go_package = "mukezhz/connectrpc/gen/greet/v1;greetv1";
+option go_package = "mukezhz/connectrpc/gen/idl/greet/v1;greetv1";
 
 message GreetRequest {
   string name = 1;

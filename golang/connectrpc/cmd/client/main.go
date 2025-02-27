@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"io"
-	greetv1 "mukezhz/connectrpc/gen/greet/v1"
-	"mukezhz/connectrpc/gen/greet/v1/greetv1connect"
+	greetv1 "mukezhz/connectrpc/gen/idl/greet/v1"
+	"mukezhz/connectrpc/gen/idl/greet/v1/greetv1connect"
 	"net/http"
 	"strings"
 

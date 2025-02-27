@@ -8,7 +8,7 @@ import (
 	"connectrpc.com/connect"
 )
 
-const tokenHeader = "authorization"
+const tokenHeader = "x-auth-token"
 
 func NewAuthInterceptor() connect.UnaryInterceptorFunc {
 	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
