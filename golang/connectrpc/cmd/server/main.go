@@ -16,11 +16,33 @@ import (
 
 type GreetServer struct{}
 
+func validateGreetRequest(req *greetv1.GreetRequest) error {
+	if req.Name == "" {
+		return fmt.Errorf("Name is required")
+	}
+	return nil
+}
+
+func doSomeWork(ctx context.Context, greet string) error {
+	log.Println("Doing some work with greeting: ", greet)
+	return nil
+}
+
 func (s *GreetServer) Greet(
 	ctx context.Context,
 	req *connect.Request[greetv1.GreetRequest],
 ) (*connect.Response[greetv1.GreetResponse], error) {
 	log.Println("Request headers: ", req.Header())
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if err := validateGreetRequest(req.Msg); err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+
+	if err := doSomeWork(ctx, req.Msg.Name); err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
 	res := connect.NewResponse(&greetv1.GreetResponse{
 		Greeting: fmt.Sprintf("Hello, %s!", req.Msg.Name),
 	})
@@ -31,7 +53,8 @@ func (s *GreetServer) Greet(
 func main() {
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
-	path, handler := greetv1connect.NewGreetServiceHandler(greeter)
+	interceptors := connect.WithInterceptors(NewAuthInterceptor())
+	path, handler := greetv1connect.NewGreetServiceHandler(greeter, interceptors)
 	mux.Handle(path, handler)
 	log.Println("Listening on :8080")
 	http.ListenAndServe(
