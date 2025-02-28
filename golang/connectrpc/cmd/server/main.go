@@ -62,11 +62,10 @@ func (s *UserService) Create(
 	ctx context.Context,
 	req *connect.Request[userv1.CreateRequest],
 ) (*connect.Response[userv1.CreateResponse], error) {
-	return nil, nil
+	return connect.NewResponse(&userv1.CreateResponse{
+		FullName: "full name",
+	}), nil
 }
-
-const greetIDL = "idl.greet.v1.GreetService"
-const userIDL = "idl.user.v1.UserService"
 
 func main() {
 	greeter := &GreetServer{}
@@ -77,7 +76,10 @@ func main() {
 	reflector := grpcreflect.NewReflector(
 		grpcreflect.NamerFunc(
 			func() []string {
-				return []string{greetIDL, userIDL}
+				return []string{
+					greetv1connect.GreetServiceName,
+					userv1connect.UserServiceName,
+				}
 			}),
 		grpcreflect.WithExtensionResolver(protoregistry.GlobalTypes),
 		grpcreflect.WithDescriptorResolver(protoregistry.GlobalFiles),
