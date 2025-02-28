@@ -2,11 +2,17 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"connectrpc.com/connect"
+	"connectrpc.com/grpchealth"
 	"connectrpc.com/grpcreflect"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -71,6 +77,12 @@ func main() {
 	greeter := &GreetServer{}
 	userService := &UserService{}
 	mux := http.NewServeMux()
+	compress1KB := connect.WithCompressMinBytes(1024)
+	// HEALTHCHECK
+	mux.Handle(grpchealth.NewHandler(
+		grpchealth.NewStaticChecker(greetv1connect.GreetServiceName),
+		compress1KB,
+	))
 
 	// REFLECTION
 	reflector := grpcreflect.NewReflector(
@@ -95,9 +107,23 @@ func main() {
 
 	log.Println("Listening on :8080")
 
-	http.ListenAndServe(
-		"localhost:8080",
-		// Use h2c so we can serve HTTP/2 without TLS.
-		h2c.NewHandler(mux, &http2.Server{}),
-	)
+	srv := &http.Server{
+		Addr:    "localhost:8080",
+		Handler: h2c.NewHandler(mux, &http2.Server{}),
+	}
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("HTTP listen and serve: %v", err)
+		}
+	}()
+
+	<-signals
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("HTTP shutdown: %v", err) //nolint:gocritic
+	}
 }
