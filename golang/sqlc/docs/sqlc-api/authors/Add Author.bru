@@ -1,0 +1,18 @@
+meta {
+  name: Add Author
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseURL}}/api/authors
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "hello",
+    "bio": "world"
+  }
+}

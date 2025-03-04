@@ -210,3 +210,16 @@ go get example.com/theirmodule@latest
 go mod tidy
 ```
 </details>
+
+<details>
+
+```zsh
+# Atlas migration creation
+make migrate-diff
+```
+
+```zsh
+# Apply migration
+make migrate-apply
+```
+</details>

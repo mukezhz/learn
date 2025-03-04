@@ -115,3 +115,14 @@ func (c *Controller) HandleAddAuthorWithBooks(ctx *gin.Context) {
 	}
 	responses.SuccessJSON(ctx, http.StatusCreated, "Author with books created successfully")
 }
+
+func (c *Controller) HandleCache(ctx *gin.Context) {
+	c.logger.Infof("Cache status: %v", framework.Cache)
+	ctx.JSON(http.StatusOK, gin.H{"data": framework.Cache})
+}
+
+func (c *Controller) HandleToggleCache(ctx *gin.Context) {
+	framework.Cache = !framework.Cache
+	c.logger.Infof("Cache status: %v", framework.Cache)
+	ctx.JSON(http.StatusOK, gin.H{"data": framework.Cache})
+}

@@ -15,7 +15,7 @@ type Database struct {
 }
 
 func NewDatabase(logger framework.Logger, env *framework.Env) *Database {
-	url := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s", env.DBHost, env.DBUsername, env.DBPassword, env.DBName, env.DBPort, env.DBTimeZone)
+	url := fmt.Sprintf("%s&TimeZone=%s", env.DBURL, env.DBTimeZone)
 	logger.Info("Connecting to database", "url", url)
 	ctx := context.Background()
 

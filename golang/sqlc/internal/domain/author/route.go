@@ -23,4 +23,6 @@ func RegisterRoute(r *Route) {
 	r.groupRouter.GET("/filter", r.controller.HandleFilterAuthors)
 	r.groupRouter.GET("/:id", r.controller.HandleGetAuthorByID)
 	r.groupRouter.POST("/books", r.controller.HandleAddAuthorWithBooks)
+	r.groupRouter.GET("/cache", r.controller.HandleCache)
+	r.groupRouter.POST("/cache", r.controller.HandleToggleCache)
 }

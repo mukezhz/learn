@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/mukezhz/learn/tree/main/golang/sqlc/internal/adapter/persistent/sqlc_gen"
+	repo "github.com/mukezhz/learn/tree/main/golang/sqlc/internal/adapter/persistent/sqlc_gen"
 	"github.com/mukezhz/learn/tree/main/golang/sqlc/internal/domain/models"
 	"github.com/mukezhz/learn/tree/main/golang/sqlc/pkg/framework"
 	"github.com/mukezhz/learn/tree/main/golang/sqlc/pkg/infrastructure"
@@ -13,7 +13,7 @@ import (
 
 type Repository struct {
 	db      *infrastructure.Database
-	queries *sqlc_gen.Queries
+	queries *repo.Queries
 	logger  framework.Logger
 }
 
@@ -23,7 +23,7 @@ func NewRepository(
 ) *Repository {
 	return &Repository{
 		db:      db,
-		queries: sqlc_gen.New(db.Pool),
+		queries: repo.New(db.Pool),
 		logger:  logger,
 	}
 }
@@ -36,7 +36,7 @@ func (r *Repository) FindAuthors(
 		return nil, err
 	}
 
-	authors = utils.Map(dbAuthors, func(dbAuthor sqlc_gen.Author) models.Author {
+	authors = utils.Map(dbAuthors, func(dbAuthor repo.Author) models.Author {
 		return models.Author{
 			ID:        dbAuthor.ID,
 			Name:      dbAuthor.Name,
@@ -52,7 +52,7 @@ func (r *Repository) AddAuthor(
 	ctx context.Context,
 	author models.Author,
 ) error {
-	_, err := r.queries.CreateAuthor(ctx, sqlc_gen.CreateAuthorParams{
+	_, err := r.queries.CreateAuthor(ctx, repo.CreateAuthorParams{
 		Name: author.Name,
 		Bio: pgtype.Text{
 			String: author.Bio,
@@ -68,7 +68,7 @@ func (r *Repository) FilterAuthors(
 	author models.AuthorFilter,
 ) (authors []models.Author, err error) {
 	r.logger.Info("Filtering authors", " author name: ", author.Name, " bio", author.Bio)
-	dbAuthors, err := r.queries.FilterAuthors(ctx, sqlc_gen.FilterAuthorsParams{
+	dbAuthors, err := r.queries.FilterAuthors(ctx, repo.FilterAuthorsParams{
 		Limit:  int32(pagination.GetLimit()),
 		Name:   author.Name,
 		Offset: int32(pagination.GetOffset()),
@@ -79,7 +79,7 @@ func (r *Repository) FilterAuthors(
 		return []models.Author{}, err
 	}
 
-	authors = utils.Map(dbAuthors, func(dbAuthor sqlc_gen.Author) models.Author {
+	authors = utils.Map(dbAuthors, func(dbAuthor repo.Author) models.Author {
 		return models.Author{
 			ID:        dbAuthor.ID,
 			Name:      dbAuthor.Name,
@@ -111,7 +111,7 @@ func (r *Repository) GetAuthorByID(
 	if err != nil {
 		author.Books = []models.Book{}
 	}
-	books := utils.Map(dbBooks, func(dbBook sqlc_gen.Book) models.Book {
+	books := utils.Map(dbBooks, func(dbBook repo.Book) models.Book {
 		return models.Book{
 			ID:            dbBook.ID,
 			Title:         dbBook.Title,
@@ -134,7 +134,7 @@ func (r *Repository) AddAuthorWithBooks(
 	}
 	defer tx.Rollback(ctx)
 
-	dbAuthor, err := r.queries.WithTx(tx).CreateAuthor(ctx, sqlc_gen.CreateAuthorParams{
+	dbAuthor, err := r.queries.WithTx(tx).CreateAuthor(ctx, repo.CreateAuthorParams{
 		Name: author.Name,
 		Bio: pgtype.Text{
 			String: author.Bio,
@@ -145,8 +145,8 @@ func (r *Repository) AddAuthorWithBooks(
 		return err
 	}
 	_, err = r.queries.WithTx(tx).CreateBooks(ctx,
-		utils.Map(author.Books, func(book models.Book) sqlc_gen.CreateBooksParams {
-			return sqlc_gen.CreateBooksParams{
+		utils.Map(author.Books, func(book models.Book) repo.CreateBooksParams {
+			return repo.CreateBooksParams{
 				Title:    book.Title,
 				AuthorID: dbAuthor.ID,
 				PublishedDate: pgtype.Date{
