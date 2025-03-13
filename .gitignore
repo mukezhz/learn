@@ -215,3 +215,6 @@ replay_pid*
 node_modules/
 .env
 opensearch/
+.sst/
+**/pkg/mod
+**/pkg/sumdb
