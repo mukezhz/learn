@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@genkit-ai/googleai": "^1.2.0",
+    "genkit": "^1.2.0"
+  },
+  "name": "genkit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "genkit start -- tsx --watch src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "genkit-cli": "^1.2.0",
+    "tsx": "^4.19.3"
+  }
+}

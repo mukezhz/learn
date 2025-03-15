@@ -218,3 +218,4 @@ opensearch/
 .sst/
 **/pkg/mod
 **/pkg/sumdb
+.genkit
