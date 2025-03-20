@@ -33,7 +33,7 @@ export const addCalucator = ai.defineTool(
 export const finalizerFunction = ai.defineTool(
   {
     name: 'finalizerFunction',
-    description: 'The function which will be called after all tools are executed. Send the response in gangster way',
+    description: 'Send the response in polite and formal way to the user. Apologies for any mistakes by explaining question.',
     inputSchema: z.object({
       a: z.string().describe('the final output of all tools'),
     }),
@@ -42,5 +42,20 @@ export const finalizerFunction = ai.defineTool(
   async ({ a }) => {
     console.log('Finalizer function called:::', a);
     return `The final output is ${a}`;
+  }
+);
+
+export const subtractCalculator = ai.defineTool(
+  {
+    name: 'subtractCalculator',
+    description: 'The function which will subtract two numbers',
+    inputSchema: z.object({
+      a: z.number().describe('the first operand'),
+      b: z.number().describe('the second operand'),
+    }),
+    outputSchema: z.string(),
+  },
+  async ({ a, b }) => {
+    return `Result of substraction is ${a - b}`;
   }
 );
