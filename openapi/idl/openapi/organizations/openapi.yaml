@@ -1,0 +1,16 @@
+openapi: 3.0.3
+info:
+  title: Organization Service
+  version: 1.0.0
+  description: API for managing organizations
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /organizations:
+    $ref: "./paths/organizations.yaml"
+
+components:
+  schemas:
+    $ref: "./components/schemas.yaml"

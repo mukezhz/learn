@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: User Service
+  version: 1.0.0
+  description: API for managing users
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Users
+paths:
+  /users:
+    get:
+      summary: Get all users
+      operationId: GetUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: CreateUser
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email

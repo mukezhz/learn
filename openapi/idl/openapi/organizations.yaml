@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Organization Service
+  version: 1.0.0
+  description: API for managing organizations
+servers:
+  - url: http://localhost:8080
+paths:
+  /organizations:
+    get:
+      summary: Get all organizations
+      operationId: GetOrganizations
+      tags:
+        - Organizations
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+    post:
+      summary: Create a new organization
+      operationId: CreateOrganization
+      tags:
+        - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+      responses:
+        '201':
+          description: Organization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        address:
+          type: string

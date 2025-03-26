@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: User Service
+  version: 1.0.0
+  description: API for managing users
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users:
+    $ref: "./users/paths/users.yaml"
+  /organizations:
+    $ref: "./organizations/paths/organizations.yaml"
