@@ -1,0 +1,27 @@
+package server_gen
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// OrganizationHandler implements the generated OrganizationServerInterface
+type OrganizationHandler struct {
+	organizations []Organization
+}
+
+func NewOrganizationHandler() *OrganizationHandler {
+	return &OrganizationHandler{}
+}
+
+// GetOrganizations returns a list of organizations
+func (h *OrganizationHandler) GetOrganizations(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, h.organizations)
+}
+
+// CreateOrganization adds a new organization
+func (h *OrganizationHandler) CreateOrganization(ctx *gin.Context, org Organization) {
+	h.organizations = append(h.organizations, org)
+	ctx.JSON(http.StatusCreated, org)
+}
