@@ -1,0 +1,15 @@
+{
+  "servers": {
+      "get_weather_app": {
+          "type": "stdio",
+          "command": "uv",
+          "args": [
+              "--directory",
+              "/Users/mukesh.chaudhary/wesionaryTEAM/mcp-kss",
+              "run",
+              "main.py"
+          ]
+      }
+  }
+  
+}
